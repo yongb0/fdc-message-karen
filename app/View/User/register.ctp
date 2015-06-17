@@ -8,4 +8,6 @@
 	echo $this->Form->input('password');
 	echo $this->Form->input('re_password', array('label' => 'Confirm Password', 'type' => 'password'));
 	echo $this->Form->end('Register'); 
+	
+	echo $this->HTML->link('Back to Login', array('action' => 'login'), array('class' => 'button'));
 ?>

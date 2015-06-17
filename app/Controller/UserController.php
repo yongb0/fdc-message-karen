@@ -8,19 +8,13 @@ class UserController extends AppController{
 	
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->allow('register', 'logout', 'login');
+		$this->Auth->allow('register', 'logout');
 	}
 	
-	public function index($id = null){
-		if ($this->request->is('post')) {
-			if ($this->Auth->login()) {
-				debug($this->Auth->user()); die();
-				$this->User->id = $this->Auth->user('id');
-				$this->User->saveField('last_login_time', 'date(DATE_ATOM)');
-				return $this->redirect($this->Auth->redirectUrl());
-			}
-			$this->Session->setFlash(__('Invalid username or password. Try Again.'));
-		} 
+	public function index(){
+		if ($this->Auth->login()) {
+			$this->render('index');
+		}
 	}
 	
 	public function register() {
@@ -37,15 +31,20 @@ class UserController extends AppController{
 		$this->render('thankyou');
 	}
 	
-	public function view() {
-		$this->render('view');
-	}
-	
 	public function login() {
+		if ($this->request->is('post')) {
+			if ($this->Auth->login()) {
+				$this->User->id = $this->Auth->user('id');
+				$this->User->saveField('last_login_time', date('Y:m:d H:i:s'));
+				return $this->redirect($this->Auth->redirectUrl());
+			}
+			$this->Session->setFlash(__('Invalid username or password. Try Again.'));
+		} 
 	}
 	
 	public function logout() {
-		return $this->redirect($this->Auth->logout());
+		$this->Auth->logout();
+		return $this->redirect(array('action' => 'login'));
 	}
 }
 ?>

@@ -36,20 +36,18 @@ class AppController extends Controller {
 		'Auth' => array(
 			'loginRedirect' => array(
 				'controller' => 'user',
-				'action' => 'view'
+				'action' => 'index'
 			),
 			'logoutRedirect' => array(
 				'controller' => 'user',
-				'action' => 'login'
+				'action' => 'logout'
 			),
-			'Auth' => array(
-				'autoRedirect' => false,
-				'authenticate' => array(
-					'Form' => array(
-						'passwordHasher' => 'Blowfish',
-						'fields' => array('username' => 'email', 'password' => 'password')
-					)
-				)
+			'autoRedirect' => false,
+			'authenticate' => array(
+				'Form' => array(
+					'passwordHasher' => 'Blowfish',
+					'fields' => array('username' => 'email', 'password' => 'password')
+				)	
 			),
 			'loginAction' => '/User/login'
 		)
@@ -57,6 +55,6 @@ class AppController extends Controller {
 	
 	
 	public function beforeFilter(){
-		$this->Auth->allow('index');
+		$this->Auth->allow('login');
 	}
 }
