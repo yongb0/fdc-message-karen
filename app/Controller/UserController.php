@@ -3,7 +3,7 @@ App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
 App::uses('CakeTime', 'Utility');
 
 class UserController extends AppController{
-	public $helpers = array('Html', 'Form', 'Session');
+	public $helpers = array('Html', 'Form', 'Session', 'Time');
 	public $components = array('Session');
 	
 	public function beforeFilter() {
@@ -13,7 +13,7 @@ class UserController extends AppController{
 	
 	public function index(){
 		if ($this->Auth->login()) {
-			$this->render('index');
+			$this->set('user', $this->User->findById($this->Auth->user('id')));
 		}
 	}
 	
@@ -24,6 +24,12 @@ class UserController extends AppController{
 				return $this->redirect(array('action' => 'thankyou'));
 			}
 			$this->Session->setFlash(__('Unable to save.'));
+		}
+	}
+	
+	public function update(){
+		if ($this->Auth->login()){
+			$this->set('user', $this->User->findById($this->Auth->user('id')));
 		}
 	}
 	
