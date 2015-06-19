@@ -22,6 +22,11 @@ class User extends AppModel{
 			'required' => array(
 				'rule' => array('equalToField', 'password'),
 				'message' => 'Re-type password')
+		),
+		'image' => array(
+			'rule' => array(
+				'extension' => array('jpg', 'gif', 'png')),
+			'message' => 'Invalid image type'
 		)
 	);
 	

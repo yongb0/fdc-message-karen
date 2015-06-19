@@ -8,7 +8,7 @@ class UserController extends AppController{
 	
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->allow('register', 'logout');
+		$this->Auth->allow('register', 'logout', 'thankyou');
 	}
 	
 	public function index(){
@@ -20,7 +20,6 @@ class UserController extends AppController{
 	public function register() {
 		if ($this->request->is('post')) {
 			if ($this->User->save($this->request->data)) {
-				$this->Session->setFlash(__('Successfully saved.'));
 				return $this->redirect(array('action' => 'thankyou'));
 			}
 			$this->Session->setFlash(__('Unable to save.'));
@@ -29,6 +28,13 @@ class UserController extends AppController{
 	
 	public function update(){
 		if ($this->Auth->login()){
+			if ($this->request->is('post')) {
+				$this->User->id = $this->request->data['User']['id'];
+				if ($this->User->save($this->request->data)) {
+					return $this->redirect(array('action' => 'index'));
+				}
+			$this->Session->setFlash(__('Unable to update.'));
+			}
 			$this->set('user', $this->User->findById($this->Auth->user('id')));
 		}
 	}
