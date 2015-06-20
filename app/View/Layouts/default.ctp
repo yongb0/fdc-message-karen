@@ -49,7 +49,6 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	</div>
 	<?php 
 		echo $this->Html->script('bootstrap.min'); 
-		echo $this->Html->script('user'); 
 	?>
 </body>
 </html>

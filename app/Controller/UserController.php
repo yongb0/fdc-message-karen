@@ -3,7 +3,7 @@ App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
 App::uses('CakeTime', 'Utility');
 
 class UserController extends AppController{
-	public $helpers = array('Html', 'Form', 'Session', 'Time');
+	public $helpers = array('Html', 'Form', 'Session');
 	public $components = array('Session');
 	
 	public function beforeFilter() {
@@ -20,6 +20,7 @@ class UserController extends AppController{
 	public function register() {
 		if ($this->request->is('post')) {
 			if ($this->User->save($this->request->data)) {
+				$this->User->saveField('image', 'user-default.png');
 				return $this->redirect(array('action' => 'thankyou'));
 			}
 			$this->Session->setFlash(__('Unable to save.'));
@@ -30,6 +31,7 @@ class UserController extends AppController{
 		if ($this->Auth->login()){
 			if ($this->request->is('post')) {
 				$this->User->id = $this->request->data['User']['id'];
+				$this->request->data['User']['birthdate'] = CakeTime::format($this->request->data['User']['birthdate'], '%Y-%m-%d', 'invalid');;
 				if ($this->User->save($this->request->data)) {
 					return $this->redirect(array('action' => 'index'));
 				}
