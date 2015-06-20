@@ -40,8 +40,9 @@ class UserController extends AppController{
 	}
 	
 	public function thankyou() {
-		$this->render('thankyou');
+		$this->render();
 	}
+	
 	
 	public function login() {
 		if ($this->request->is('post')) {

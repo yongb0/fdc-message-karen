@@ -66,9 +66,12 @@
 				<td>Last Login: <?php echo $this->Time->nice($user['User']['last_login_time']); ?> </td>
 			</tr>
 			<tr>
-				<td>Hobby: <?php if (isset($user['User']['hobby'])) {
+				<td>Hobby: 
+					<div class="well well-md">
+					<?php if (isset($user['User']['hobby'])) {
 									echo $user['User']['hobby']; 
 								} else	{ echo '<small>Update to enter hobby.</small>'; }?>
+					</div>
 				</td>
 			</tr>
 		</table>

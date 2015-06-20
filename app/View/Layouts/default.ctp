@@ -27,9 +27,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	<?php
 		echo $this->Html->meta('icon');
 
-		echo $this->Html->css('bootstrap');
 		echo $this->Html->css('bootstrap.min');
-		echo $this->Html->css('jquery-bootstrap-datepicker.css');
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
@@ -50,8 +48,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		</footer>
 	</div>
 	<?php 
-		echo $this->Html->script('bootstrap'); 
 		echo $this->Html->script('bootstrap.min'); 
+		echo $this->Html->script('user'); 
 	?>
 </body>
 </html>

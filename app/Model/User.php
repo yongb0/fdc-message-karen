@@ -25,8 +25,15 @@ class User extends AppModel{
 		),
 		'image' => array(
 			'rule' => array(
-				'extension' => array('jpg', 'gif', 'png')),
-			'message' => 'Invalid image type'
+				'extension', array('gif', 'jpeg', 'png', 'jpg')
+			),
+			'message' => 'Please supply a valid image.',
+			'allowEmpty' => true
+		),
+		'birthdate' => array(
+			'rule' => array('date', 'mdy'),
+			'message' => 'Enter a valid date in MM/DD/YYYY.',
+			'allowEmpty' => true
 		)
 	);
 	
