@@ -7,9 +7,10 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/flatly/bootstrap.min.css" rel="stylesheet">
-	<link href="http://ivaynberg.github.com/select2/select2-3.3.2/select2.css" rel="stylesheet" type="text/css" />
+	<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-	<script src="http://ivaynberg.github.com/select2/select2-3.3.2/select2.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.full.min.js"></script>
+	<?php echo $this->Html->script('user');  ?>
 </head>
 <body>
 	<div class="container">
@@ -35,14 +36,17 @@
 				<label>Message: </label>
 			</div>
 			<div class="col-sm-11">
-				<input id="user-select2" type="text" class="form-control" placeholder="Enter name">
-				<?php
-					echo $this->Form->create('Message');
-				?> 	<br><?php	
-					echo $this->Form->textarea('content', array('label' => 'Message', 'class' => 'form-control', 'placeholder' => 'Enter message') );
+				<?php echo $this->Form->create('Message');?> 
+				<select class="js-example-basic-single" id="select2" style="width:500px" name="to_id">
+				  <?php foreach ($users as $user) {
+						?><option value=<?php echo $user['User']['id'];?>> <?php echo $user['User']['name']; ?> </option> <?php
+					} ?>
+				</select>
+				<br><br>
+				<?php	
+					echo $this->Form->textarea('content', array('label' => false, 'class' => 'form-control', 'placeholder' => 'Enter message') );
 				?>  <br> <?php	
 					echo $this->Form->input('created', array('type' => 'hidden', 'value' =>  date('Y:m:d H:i:s')));
-					echo $this->Form->input('from_id', array('type' => 'hidden', 'value' =>  $user));
 					echo $this->Form->submit('Send Message', array('class' => 'btn btn-primary btn-md'));
 					echo $this->Form->end();
 				?>
