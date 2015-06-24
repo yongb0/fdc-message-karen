@@ -51,6 +51,7 @@ class UserController extends AppController{
 			if ($this->Auth->login()) {
 				$this->User->id = $this->Auth->user('id');
 				$this->User->saveField('last_login_time', date('Y:m:d H:i:s'));
+				$this->Session->write('user_id', $this->Auth->user('id'));
 				return $this->redirect($this->Auth->redirectUrl());
 			}
 			$this->Session->setFlash(__('Invalid username or password. Try Again.'));

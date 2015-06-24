@@ -11,29 +11,23 @@
 </head>
 <body>
 	<div class="container">
-		<nav class="navbar navbar-default">
-			<div class="navbar-header">
-				<?php echo $this->Html->link('Message Board', array('controller' => 'message', 'action' => 'index'), array('class' => 'navbar-brand'));?>
-			</div>
-			<div>
-				<ul class="nav navbar-nav">
-					<li><?php echo $this->Html->link('New Message', array('controller' => 'message', 'action' => 'add'));?>
-					<li><?php echo $this->Html->link('Profile', array('controller' => 'user', 'action' => 'index'));?>
-					<li><?php echo $this->Html->link('Update Profile', array('controller' => 'user', 'action' => 'update'));?>
-					<li><?php echo $this->Html->link('Logout', array('controller' => 'user', 'action' => 'logout'));?>
-				</ul>
-			</div>
-		</nav>
+		<?php
+			$this->startIfEmpty('navbar');
+			echo $this->element('navbar');
+			$this->end();
+			echo $this->fetch('navbar');
+		?>	
 		<div class="page-header">
 			<h1>Message Details</h1>
 		</div>
-		<div class="text-right">
+		<div>
 			<div class="col-sm-4"></div>
 			<div class="col-sm-8">
 				<?php
-					echo $this->Form->create('Message', array('url' => array('controller' => 'message', 'action' => 'reply')));
+					echo $this->Form->create('Message', array('url' => array('controller' => 'message', 'action' => 'reply', 'id' => $this->Session->read('message_id'))));
 					echo $this->Form->textarea('content', array('class' => 'form-control', 'label' => false, 'placeholder' => 'Enter reply...'));
-					echo $this->Form->submit('Reply', array('class' => 'btn btn-success btn-md'));
+					echo $this->Form->input('created', array('type' => 'hidden', 'value' =>  date('Y:m:d H:i:s')));
+					echo $this->Form->submit('Reply', array('class' => 'btn btn-success btn-sm pull-right'));
 					echo $this->Form->end();
 				?>
 			</div>
@@ -41,25 +35,54 @@
 		<div class="row">
 			<?php $message = $data['messages'];
 				  $user = $data['user'];
-				?>
-				<div class="row">
-					<div class="col-sm-2">
-						<div class="pull-right">
-						<?php 
-							foreach ($user as $sender) {
-							if ($message['Message']['from_id'] == $sender['User']['id']) { 
-								echo $this->Html->image($sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));
-								?> <br><center><strong> <?php echo $sender['User']['name']; ?> </center></strong> 
-						<?php } }?>
+				  $current_user = $this->Session->read('user_id');
+			  foreach ($message as $msg) { 
+				if ($msg['Message']['to_id'] == $current_user) { ?> <!-- Sender -->
+					<div class="row">
+						<div class="col-sm-2">
+							<div class="pull-right">
+							<?php 
+								foreach ($user as $sender) {
+								if ($msg['Message']['from_id'] == $sender['User']['id']) { 
+									echo $this->Html->image($sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));
+									?> <br><center><strong> <?php echo $sender['User']['name']; ?> </center></strong> 
+							<?php } }?>
+							</div>
+						</div>
+						<div class="col-sm-8"> <br>
+							<div class="well well-sm">
+								<table>
+								<tr> <?php echo $msg['Message']['content'];?> </tr>
+								<tr> <td><br><strong><small>&nbsp&nbsp&nbsp&nbspSent: <?php echo $msg['Message']['created']?></small></strong></td></tr>	
+								</table>
+							</div>
 						</div>
 					</div>
+			<?php  } else { ?> <!-- Receiver -->
+				<div class="row" style="text-align:right">
+					<div class="col-sm-2"></div> 
 					<div class="col-sm-8"> <br>
-						<div class="well well-md">
-							<?php echo $message['Message']['content']; ?><br>
-							<em class="pull-right">Sent: <?php echo $message['Message']['created']?></em>
+						<div class="well well-sm">
+							<table>
+								<tr> <?php echo $msg['Message']['content'];?> </tr>
+								<tr>
+									<td><br><strong><small>&nbsp&nbsp&nbsp&nbspSent: <?php echo $msg['Message']['created']?></small></strong></td>
+								</tr>	
+							</table>
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<div class="pull-left">
+							<?php 
+								foreach ($user as $sender) {
+								if ($msg['Message']['from_id'] == $sender['User']['id']) { 
+									echo $this->Html->image($sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));
+									?> <br><center><strong>You</center></strong> 
+							<?php } }?>
 						</div>
 					</div>
 				</div>
+			<?php	} } ?>
 		</div>
 	</div>
 </body>

@@ -2,14 +2,16 @@
 
 class MessageController extends AppController{
 	public $helpers = array('Html', 'Form', 'Session', 'Time');
-	public $components = array('Session', 'RequestHandler');
+	public $components = array('Session', 'RequestHandler', 'Paginator');
 	
+		
 	public function index(){
 		if ($this->Auth->login()) {
 			$this->loadModel('User');
-			$data['messages'] = $this->Message->find('all', array(
-				'conditions' => array('Message.to_id' => $this->Auth->user('id')),
-				'order' => array('Message.created' => 'desc')));
+			$data['messages'] = $this->Message->findAllByToIdOrFromId(
+								 $this->Auth->user('id'), 
+								 $this->Auth->user('id'), 
+								 array(), array('Message.created' => 'desc'));
 			$data['user'] = $this->User->find('all');
 			$this->set('data', $data);
 		}
@@ -30,31 +32,33 @@ class MessageController extends AppController{
 		}
 	}
 	
-	public function details($id = null){
-		debug($id); die();
+	public function details(){
 		if ($this->Auth->login()) {
-			if (isset($id)) {
-				$this->loadModel('User');
-				$data['messages'] = $this->Message->findById($id);
-				$data['user'] = $this->User->find('all');
-				$this->set('data', $data);
-			}
+			$this->loadModel('User');
+			 $message = $this->Message->findById($this->request->params['id']);
+			
+			$data['messages'] = $this->Message->findAllByToIdAndFromId(
+								 array($this->Auth->user('id'), $message['Message']['from_id']),
+								 array($this->Auth->user('id'), $message['Message']['from_id']),
+								 array(), array('Message.created' => 'desc'));
+			$this->Session->write('message_id', $this->request->params['id']);
+			$data['user'] = $this->User->find('all');
+			$this->set('data', $data);
 		}
 	}
 	
-	public function reply($id = null){
-		$this->autoRender = false;
-		if(isset($id)){
-			$message = $this->Message->findById($id);
-			$this->request->data['Message']['to_id'] = $message['Message']['from_id'];
-			$this->request->data['Message']['from_id'] = $this->Auth->user('id');
-			if($this->Message->save($this->request->data)){
-				return $this->redirect(array('action' => 'details'));
-			} else {
-				$this->Session->setFlash(__('Unable to send.'));
-				return $this->redirect(array('action' => 'index'));
-			}
+	public function reply(){
+		$message = $this->Message->findById($this->request->params['named']['id']);
+		$this->request->data['Message']['to_id'] = $message['Message']['from_id'];
+		$this->request->data['Message']['from_id'] = $this->Auth->user('id');
+		if($this->Message->save($this->request->data)){
+			return $this->redirect(array('action' => 'index'));
 		}
 	}
+	
+	public function delete(){
+		$this->Message->delete($this->request->params['named']['id']);
+	}
+	
 }
 ?>

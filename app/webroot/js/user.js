@@ -5,5 +5,4 @@ $(document).ready(function () {
 	allowClear: true,
     minimumInputLength: 1,
   });
-
 });
