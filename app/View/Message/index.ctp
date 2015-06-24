@@ -50,7 +50,7 @@
 									<td> <br> <div class="btn-group"> 
 										<?php 											
 											echo $this->Html->link('Reply', array('controller' => 'message', 'action' => 'details', 'id' => $msg['Message']['id']), array('class' => 'btn btn-default btn-sm'));
-											echo $this->Html->link('Delete', array('controller' => 'message', 'action' => 'delete', 'id' => $msg['Message']['id']), array('class' => 'btn btn-primary btn-sm', 'id' => 'btn-delete'));
+											echo $this->Html->link('Delete', array('controller' => 'message', 'action' => 'delete', 'id' => $msg['Message']['id']), array('class' => 'btn btn-primary btn-sm'));
 										?>
 										</div>
 									</td>
@@ -60,13 +60,6 @@
 							</div>
 						</div>
 					</div>
-					<script type="text/javascript">
-					$(document).ready(function(){
-						$('#btn-delete').click(function() {
-							$('#msgbox').fadeOut();
-						});
-					});
-					</script>
 		  <?php   } } else { ?>
 			<div class="well well-lg" style="text-align:center"><h1>No Messages</h1></div>
 		<?php } ?>

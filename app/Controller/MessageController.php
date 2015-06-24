@@ -8,8 +8,7 @@ class MessageController extends AppController{
 	public function index(){
 		if ($this->Auth->login()) {
 			$this->loadModel('User');
-			$data['messages'] = $this->Message->findAllByToIdOrFromId(
-								 $this->Auth->user('id'), 
+			$data['messages'] = $this->Message->findAllByToId(
 								 $this->Auth->user('id'), 
 								 array(), array('Message.created' => 'desc'));
 			$data['user'] = $this->User->find('all');
@@ -57,7 +56,13 @@ class MessageController extends AppController{
 	}
 	
 	public function delete(){
+		$message = 
+		$data =  $this->Message->findAllByToIdAndFromId(
+								 array($this->Auth->user('id'), $message['Message']['from_id']),
+								 array($this->Auth->user('id'), $message['Message']['from_id']),
+								 array(), array('Message.created' => 'desc'));
 		$this->Message->delete($this->request->params['named']['id']);
+		return $this->redirect(array('action' => 'index'));
 	}
 	
 }
