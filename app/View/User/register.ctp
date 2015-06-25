@@ -11,6 +11,19 @@
 </head>
 <body>
 	<div class="container">
+		<?php 
+			switch($data) {
+				case 1: ?>
+					<div class="alert alert-warning">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Login Unsuccessful!</strong> Invalid username or password. Try again.
+					</div>
+		<?php	break; 
+				
+				default:
+				break;
+			}
+		?>
 		<div class="jumbotron">
 			<h1>Registration</h1>
 		</div>

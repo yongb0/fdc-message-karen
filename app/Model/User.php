@@ -32,6 +32,7 @@ class User extends AppModel{
 		),
 		'birthdate' => array(
 			'rule' => array('date', 'ymd'),
+			'allowEmpty' => true,
 			'message' => 'Enter a valid date in YYYY/MM/DD.'
 		)
 	);

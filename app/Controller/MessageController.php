@@ -1,22 +1,27 @@
 <?php
 
 class MessageController extends AppController{
-	public $helpers = array('Html', 'Form', 'Session', 'Time');
+	public $helpers = array('Html', 'Form', 'Session', 'Time', 'Js');
 	public $components = array('Session', 'RequestHandler', 'Paginator');
 	
-		
-	public function index(){
+	public function index() {
 		if ($this->Auth->login()) {
 			$this->loadModel('User');
-			$data['messages'] = $this->Message->findAllByToId(
-								 $this->Auth->user('id'), 
-								 array(), array('Message.created' => 'desc'));
 			$data['user'] = $this->User->find('all');
+			$options = array (
+						'conditions' => array(
+									  'or' => array('Message.to_id' => $this->Auth->user('id'),
+													'Message.from_id' => $this->Auth->user('id'))),
+						'order' => array('Message.created' => 'desc'),
+						'limit' => 1);
+			$this->Paginator->settings = $options;
+			$message_list = $this->Paginator->paginate('Message');
+			$data['messages'] = $this->filter($message_list);
 			$this->set('data', $data);
 		}
 	}
 	
-	public function add(){
+	public function add() {
 		if ($this->Auth->login()) {
 			$this->loadModel('User');
 			if ($this->request->is('post')) {
@@ -31,14 +36,14 @@ class MessageController extends AppController{
 		}
 	}
 	
-	public function details(){
+	public function details() {
 		if ($this->Auth->login()) {
 			$this->loadModel('User');
-			 $message = $this->Message->findById($this->request->params['id']);
 			
+			$message = $this->Message->findById($this->request->params['id']);
 			$data['messages'] = $this->Message->findAllByToIdAndFromId(
-								 array($this->Auth->user('id'), $message['Message']['from_id']),
-								 array($this->Auth->user('id'), $message['Message']['from_id']),
+								 array($message['Message']['to_id'], $message['Message']['from_id']),
+								 array($message['Message']['to_id'], $message['Message']['from_id']),
 								 array(), array('Message.created' => 'desc'));
 			$this->Session->write('message_id', $this->request->params['id']);
 			$data['user'] = $this->User->find('all');
@@ -46,23 +51,71 @@ class MessageController extends AppController{
 		}
 	}
 	
-	public function reply(){
+	public function reply() {
 		$message = $this->Message->findById($this->request->params['named']['id']);
 		$this->request->data['Message']['to_id'] = $message['Message']['from_id'];
-		$this->request->data['Message']['from_id'] = $this->Auth->user('id');
+		$this->request->data['Message']['from_id'] = $message['Message']['to_id'];
 		if($this->Message->save($this->request->data)){
 			return $this->redirect(array('action' => 'index'));
 		}
 	}
 	
-	public function delete(){
-		$message = 
+	public function delete() {
+		// insert line to put value for $message based on id passed from parameter 
+		$this->autoRender = false;
+		$message = $this->Message->findById($this->request->params['named']['id']);
 		$data =  $this->Message->findAllByToIdAndFromId(
-								 array($this->Auth->user('id'), $message['Message']['from_id']),
-								 array($this->Auth->user('id'), $message['Message']['from_id']),
+								 array($message['Message']['to_id'], $message['Message']['from_id']),
+								 array($message['Message']['to_id'], $message['Message']['from_id']),
 								 array(), array('Message.created' => 'desc'));
-		$this->Message->delete($this->request->params['named']['id']);
-		return $this->redirect(array('action' => 'index'));
+		foreach ($data as $list) {
+			$this->Message->delete($list['Message']['id']);
+		}
+	}
+	
+	public function show() { //function for paginating messages
+		$this->layout = 'ajax';
+		$this->loadModel('User');
+		$options = array (
+						'conditions' => array(
+									  'or' => array('Message.to_id' => $this->Auth->user('id'),
+													'Message.from_id' => $this->Auth->user('id'))),
+						'order' => array('Message.created' => 'desc'),
+						'limit' => 10);
+		$this->Paginator->settings = $options;
+		$message_list = $this->Paginator->paginate('Message');
+		$data['messages'] = $this->filter($message_list);
+		$data['user'] = $this->User->find('all');
+		$this->set('data', $data);
+	}
+	
+	public function filter($array) { //function to filter messages to get unique and latest messages
+		$tempArray = array();
+		
+		foreach ($array as $array1) {
+			if ($tempArray == null) {
+				$tempArray[] = $array1; //insert the first element from the passed array to put value in tempArray
+			} else {
+				foreach ($tempArray as $array2) {
+					if (($array1['Message']['to_id'] == $array2['Message']['to_id']) || ($array1['Message']['to_id'] == $array2['Message']['from_id'])) {
+						if (($array1['Message']['from_id'] == $array2['Message']['to_id']) || ($array1['Message']['from_id'] == $array2['Message']['from_id'])) {
+							if ($array1['Message']['created'] > $array2['Message']['created']) {	
+								for ($i = 0; $i < count($tempArray); $i++){
+									unset($tempArray[$i]);
+									$tempArray[] = $array1;
+									
+								}
+							}
+							break;
+						} 	
+					} else {
+						$tempArray[] = $array1; // if not match to existing element in temp array, insert new element to array
+						break; }	
+				}
+			}
+		}
+		
+		return $tempArray;
 	}
 	
 }

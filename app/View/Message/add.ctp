@@ -8,9 +8,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/flatly/bootstrap.min.css" rel="stylesheet">
 	<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.full.min.js"></script>
-	<?php echo $this->Html->script('user');  ?>
+	<script src="/js/custom.js"></script>
+	
 </head>
 <body>
 	<div class="container">
@@ -32,9 +32,18 @@
 				<?php echo $this->Form->create('Message');?> 
 				<select class="js-example-basic-single" id="select2" style="width:500px" name="to_id">
 				  <?php foreach ($users as $user) {
-						?><option value=<?php echo $user['User']['id'];?>> <?php echo $user['User']['name']; ?> </option> <?php
+						?><option value=<?php echo $user['User']['id'];?> > <?php echo $user['User']['name']; ?> </option> <?php
 					} ?>
 				</select>
+				<script type="text/javascript">
+					$(document).ready(function () { //for select2 plugin
+					  $('#select2').select2({
+						placeholder: "Enter Name",
+						allowClear: true,
+						minimumInputLength: 1,
+					  });
+					});
+				</script>
 				<br><br>
 				<?php	
 					echo $this->Form->textarea('content', array('label' => false, 'class' => 'form-control', 'placeholder' => 'Enter message') );

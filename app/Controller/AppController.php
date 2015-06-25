@@ -32,6 +32,7 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
 	public $components = array(
+		'Paginator',
 		'Session',
 		'Auth' => array(
 			'loginRedirect' => array(
@@ -56,5 +57,7 @@ class AppController extends Controller {
 	
 	public function beforeFilter(){
 		$this->Auth->allow('login');
+		$this->Paginator->settings=array(
+              'limit'=>1);
 	}
 }

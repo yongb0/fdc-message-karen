@@ -7,7 +7,6 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/flatly/bootstrap.min.css" rel="stylesheet">
-	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -37,7 +36,7 @@
 				  $user = $data['user'];
 				  $current_user = $this->Session->read('user_id');
 			  foreach ($message as $msg) { 
-				if ($msg['Message']['to_id'] == $current_user) { ?> <!-- Sender -->
+				if ($msg['Message']['to_id'] == $current_user) { ?> <!-- Not current user -->
 					<div class="row">
 						<div class="col-sm-2">
 							<div class="pull-right">
@@ -53,12 +52,12 @@
 							<div class="well well-sm">
 								<table>
 								<tr> <?php echo $msg['Message']['content'];?> </tr>
-								<tr> <td><br><strong><small>&nbsp&nbsp&nbsp&nbspSent: <?php echo $msg['Message']['created']?></small></strong></td></tr>	
+								<tr> <td><br><strong><small>Sent: <?php echo $msg['Message']['created']?></small></strong></td></tr>	
 								</table>
 							</div>
 						</div>
 					</div>
-			<?php  } else { ?> <!-- Receiver -->
+			<?php  } else { ?> <!-- Current user -->
 				<div class="row" style="text-align:right">
 					<div class="col-sm-2"></div> 
 					<div class="col-sm-8"> <br>
@@ -66,7 +65,7 @@
 							<table>
 								<tr> <?php echo $msg['Message']['content'];?> </tr>
 								<tr>
-									<td><br><strong><small>&nbsp&nbsp&nbsp&nbspSent: <?php echo $msg['Message']['created']?></small></strong></td>
+									<td><br><strong><small>Sent: <?php echo $msg['Message']['created']?></small></strong></td>
 								</tr>	
 							</table>
 						</div>
@@ -76,8 +75,8 @@
 							<?php 
 								foreach ($user as $sender) {
 								if ($msg['Message']['from_id'] == $sender['User']['id']) { 
-									echo $this->Html->image($sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));
-									?> <br><center><strong>You</center></strong> 
+									echo $this->Html->image($sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));?> 
+									<br><center><strong>You</center></strong> 
 							<?php } }?>
 						</div>
 					</div>

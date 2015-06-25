@@ -4,14 +4,14 @@ App::uses('CakeTime', 'Utility');
 
 class UserController extends AppController{
 	public $helpers = array('Html', 'Form', 'Session');
-	public $components = array('Session');
+	public $components = array('Session', 'RequestHandler');
 	
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->allow('register', 'logout', 'thankyou');
 	}
 	
-	public function index(){
+	public function index() {
 		if ($this->Auth->login()) {
 			$this->set('user', $this->User->findById($this->Auth->user('id')));
 		}
@@ -22,12 +22,15 @@ class UserController extends AppController{
 			if ($this->User->save($this->request->data)) {
 				$this->User->saveField('image', 'user-default.png');
 				return $this->redirect(array('action' => 'thankyou'));
-			}
-			$this->Session->setFlash(__('Unable to save.'));
+			} else {
+				$data = 1;
+				$this->set('data', $data);
+			} 
 		}
+		$this->set('data', $data=null);
 	}
 	
-	public function update(){
+	public function update() {
 		if ($this->Auth->login()){
 			if ($this->request->is('post')) {
 				$this->User->id = $this->request->data['User']['id'];
@@ -51,11 +54,17 @@ class UserController extends AppController{
 			if ($this->Auth->login()) {
 				$this->User->id = $this->Auth->user('id');
 				$this->User->saveField('last_login_time', date('Y:m:d H:i:s'));
+				$this->User->saveField('created_ip', $this->request->clientIp());
+				$this->User->saveField('modified_ip', $this->request->clientIp());
 				$this->Session->write('user_id', $this->Auth->user('id'));
 				return $this->redirect($this->Auth->redirectUrl());
-			}
-			$this->Session->setFlash(__('Invalid username or password. Try Again.'));
-		} 
+			} else {
+				$data = 1;
+				$this->set('data', $data);
+			} 
+		} else {
+			$this->set('data', $data=null);
+		}
 	}
 	
 	public function logout() {
