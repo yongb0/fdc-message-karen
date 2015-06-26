@@ -30,4 +30,11 @@ App::uses('Model', 'Model');
  * @package       app.Model
  */
 class AppModel extends Model {
+	var $controllerAction = null;
+
+function setControllerAction( $action = null ) {
+    if($action) {
+        $this->controllerAction = $action;
+    }
+}
 }

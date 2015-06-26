@@ -3,26 +3,16 @@
 class MessageController extends AppController{
 	public $helpers = array('Html', 'Form', 'Session', 'Time', 'Js');
 	public $components = array('Session', 'RequestHandler', 'Paginator');
-	
+
+
 	public function index() {
 		if ($this->Auth->login()) {
-			$this->loadModel('User');
-			$data['user'] = $this->User->find('all');
-			$options = array (
-						'conditions' => array(
-									  'or' => array('Message.to_id' => $this->Auth->user('id'),
-													'Message.from_id' => $this->Auth->user('id'))),
-						'order' => array('Message.created' => 'desc'),
-						'limit' => 1);
-			$this->Paginator->settings = $options;
-			$message_list = $this->Paginator->paginate('Message');
-			$data['messages'] = $this->filter($message_list);
-			$this->set('data', $data);
 		}
 	}
 	
 	public function add() {
 		if ($this->Auth->login()) {
+			$data['alert'] = null;
 			$this->loadModel('User');
 			if ($this->request->is('post')) {
 				$this->request->data['Message']['from_id'] = $this->Auth->user('id');
@@ -30,9 +20,10 @@ class MessageController extends AppController{
 				if ($this->Message->save($this->request->data)) {
 					return $this->redirect(array('action' => 'index'));
 				}
-				$this->Session->setFlash(__('Unable to send.'));
+				$data['alert'] = 1; //for alert message when error occurs
 			}
-			$this->set('users', $this->User->find('all'));
+			$data['users'] = $this->User->find('all');
+			$this->set('data', $data);
 		}
 	}
 	
@@ -60,7 +51,7 @@ class MessageController extends AppController{
 		}
 	}
 	
-	public function delete() {
+	public function delete_list() {
 		// insert line to put value for $message based on id passed from parameter 
 		$this->autoRender = false;
 		$message = $this->Message->findById($this->request->params['named']['id']);
@@ -73,16 +64,24 @@ class MessageController extends AppController{
 		}
 	}
 	
+	public function delete() {
+		// insert line to put value for $message based on id passed from parameter 
+		$this->autoRender = false;
+		$id = $this->request->params['named']['id'];
+		$this->Message->delete($id);
+	}
+	
 	public function show() { //function for paginating messages
-		$this->layout = 'ajax';
 		$this->loadModel('User');
+		$this->Message->setControllerAction('show');
 		$options = array (
 						'conditions' => array(
 									  'or' => array('Message.to_id' => $this->Auth->user('id'),
 													'Message.from_id' => $this->Auth->user('id'))),
 						'order' => array('Message.created' => 'desc'),
-						'limit' => 10);
+						'limit' => 5);
 		$this->Paginator->settings = $options;
+		//debug($this->Message->find('all'));
 		$message_list = $this->Paginator->paginate('Message');
 		$data['messages'] = $this->filter($message_list);
 		$data['user'] = $this->User->find('all');

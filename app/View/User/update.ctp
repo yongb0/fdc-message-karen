@@ -12,7 +12,19 @@
 </head>
 <body>
 	<div class="container">
-		<?php
+		<?php 
+			$user = $data['user'];
+			switch($data['alert']) {
+				case 1: ?>
+					<div class="alert alert-warning">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Update Unsuccessful!</strong> Invalid input or empty field. Try again.
+					</div>
+		<?php	break; 
+				
+				default:
+				break;
+			}
 			$this->startIfEmpty('navbar');
 			echo $this->element('navbar');
 			$this->end();

@@ -26,10 +26,6 @@
 	</div>
 	<br>
 	<?php echo $this->Html->script('custom', array('inline' => false)); ?>
-	<div id="paginated-content-container" class="container">
-		<div class="loading-bar" style="text-align:center">
-			<p><?php echo $this->Html->image('ajax-loader.gif')?></p>
-		</div>
-	</div>
+	<div id="paginated-content-container" class="container"></div>
 </body>
 </html>

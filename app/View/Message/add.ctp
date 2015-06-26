@@ -9,12 +9,22 @@
 	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/flatly/bootstrap.min.css" rel="stylesheet">
 	<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
 	<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.full.min.js"></script>
-	<script src="/js/custom.js"></script>
 	
 </head>
 <body>
 	<div class="container">
-		<?php
+		<?php 
+			switch($data['alert']) {
+				case 1: ?>
+					<div class="alert alert-warning">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Login Unsuccessful!</strong> Invalid username or password. Try again.
+					</div>
+		<?php	break; 
+				
+				default:
+				break;
+			}
 			$this->startIfEmpty('navbar');
 			echo $this->element('navbar');
 			$this->end();
@@ -31,7 +41,7 @@
 			<div class="col-sm-11">
 				<?php echo $this->Form->create('Message');?> 
 				<select class="js-example-basic-single" id="select2" style="width:500px" name="to_id">
-				  <?php foreach ($users as $user) {
+				  <?php foreach ($data['users'] as $user) {
 						?><option value=<?php echo $user['User']['id'];?> > <?php echo $user['User']['name']; ?> </option> <?php
 					} ?>
 				</select>

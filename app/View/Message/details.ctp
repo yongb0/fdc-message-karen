@@ -37,7 +37,7 @@
 				  $current_user = $this->Session->read('user_id');
 			  foreach ($message as $msg) { 
 				if ($msg['Message']['to_id'] == $current_user) { ?> <!-- Not current user -->
-					<div class="row">
+					<div class="row" id=<?php echo 'msg'.$msg['Message']['id']?>>
 						<div class="col-sm-2">
 							<div class="pull-right">
 							<?php 
@@ -49,23 +49,27 @@
 							</div>
 						</div>
 						<div class="col-sm-8"> <br>
-							<div class="well well-sm">
+							<div class="well well-sm pull-left">
 								<table>
-								<tr> <?php echo $msg['Message']['content'];?> </tr>
-								<tr> <td><br><strong><small>Sent: <?php echo $msg['Message']['created']?></small></strong></td></tr>	
+									<tr> <?php echo $msg['Message']['content'];?></tr>
+									<tr>
+										<td><br><?php echo $this->Html->link(null, array('controller' => 'message', 'action' => 'delete', 'id' => $msg['Message']['id']), array('class' => 'btn glyphicon glyphicon-remove', 'id' => 'delete'.$msg['Message']['id'])); ?></td>
+										<td><br><strong><small>Sent: <?php echo $msg['Message']['created']?></small></strong></td>
+									</tr>	
 								</table>
 							</div>
 						</div>
 					</div>
 			<?php  } else { ?> <!-- Current user -->
-				<div class="row" style="text-align:right">
+				<div class="row" id=<?php echo 'msg'.$msg['Message']['id']?>>
 					<div class="col-sm-2"></div> 
 					<div class="col-sm-8"> <br>
-						<div class="well well-sm">
-							<table>
-								<tr> <?php echo $msg['Message']['content'];?> </tr>
+						<div class="well well-sm pull-right">
+							<table class="pull-right">
+								<tr> <?php echo $msg['Message']['content'];?></tr>
 								<tr>
 									<td><br><strong><small>Sent: <?php echo $msg['Message']['created']?></small></strong></td>
+									<td><br><?php echo $this->Html->link(null, array('controller' => 'message', 'action' => 'delete', 'id' => $msg['Message']['id']), array('class' => 'btn glyphicon glyphicon-remove', 'id' => 'delete'.$msg['Message']['id'], 'style' => 'float:right')); ?></td>
 								</tr>	
 							</table>
 						</div>
@@ -81,7 +85,27 @@
 						</div>
 					</div>
 				</div>
-			<?php	} } ?>
+			<?php	} ?>
+			<script type="text/javascript">
+				$(document).ready(function(){
+					$(<?php echo "'#delete".$msg['Message']['id']."'"?>).click(function() {
+						var confirm_delete = confirm('Are you sure you want to delete message?');
+						var url = $(this).attr('href');
+						if (confirm_delete){
+							$.ajax({
+								url: url,
+								data: <?php echo $msg['Message']['id']; ?>,
+								type: 'POST',
+								success: function(){
+									$(<?php echo "'#msg".$msg['Message']['id']."'"?>).fadeOut();
+								}
+							});
+						}
+						return false;
+					});
+				});
+			</script>
+			<?php } ?>	
 		</div>
 	</div>
 </body>

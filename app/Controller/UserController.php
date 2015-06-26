@@ -23,24 +23,29 @@ class UserController extends AppController{
 				$this->User->saveField('image', 'user-default.png');
 				return $this->redirect(array('action' => 'thankyou'));
 			} else {
-				$data = 1;
+				$data = 1; //for alert message when error occurs
 				$this->set('data', $data);
 			} 
 		}
-		$this->set('data', $data=null);
+		$this->set('data', $data = null);
 	}
 	
 	public function update() {
 		if ($this->Auth->login()){
+			$data['alert'] = null;
 			if ($this->request->is('post')) {
 				$this->User->id = $this->request->data['User']['id'];
-				$this->request->data['User']['birthdate'] = CakeTime::format($this->request->data['User']['birthdate'], '%Y-%m-%d', 'invalid');;
+				if (isset($this->request->data['User']['birthdate'])) {
+					$this->request->data['User']['birthdate'] = CakeTime::format($this->request->data['User']['birthdate'], '%Y-%m-%d', 'invalid');
+				} 
 				if ($this->User->save($this->request->data)) {
 					return $this->redirect(array('action' => 'index'));
-				}
-			$this->Session->setFlash(__('Unable to update.'));
+				} else {
+					$data['alert'] = 1; //for alert message when error occurs
+				} 
 			}
-			$this->set('user', $this->User->findById($this->Auth->user('id')));
+			$data['user'] = $this->User->findById($this->Auth->user('id'));
+			$this->set('data', $data);
 		}
 	}
 	
@@ -59,11 +64,11 @@ class UserController extends AppController{
 				$this->Session->write('user_id', $this->Auth->user('id'));
 				return $this->redirect($this->Auth->redirectUrl());
 			} else {
-				$data = 1;
+				$data = 1; //for alert message when error occurs
 				$this->set('data', $data);
 			} 
 		} else {
-			$this->set('data', $data=null);
+			$this->set('data', $data = null);
 		}
 	}
 	
