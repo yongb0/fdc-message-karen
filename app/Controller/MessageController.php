@@ -86,41 +86,25 @@ class MessageController extends AppController{
 						'order' => array('Message.created' => 'desc'),
 						'limit' => 10);
 		$this->Paginator->settings = $options;
-		//debug($this->Message->find('all'));
 		$message_list = $this->Paginator->paginate('Message');
-		$data['messages'] = $this->filter($message_list);
+		$data['messages'] = $this->filter();
 		$data['user'] = $this->User->find('all');
 		$this->set('data', $data);
 	}
 	
-	public function filter($array) { //function to filter messages to get unique and latest messages
+	public function filter() { //function to filter messages to get unique and latest messages
 		$tempArray = array();
-		
-		foreach ($array as $array1) {
-			if ($tempArray == null) {
-				$tempArray[] = $array1; //insert the first element from the passed array to put value in tempArray
-			} else {
-				foreach ($tempArray as $array2) {
-					if (($array1['Message']['to_id'] == $array2['Message']['to_id']) || ($array1['Message']['to_id'] == $array2['Message']['from_id'])) {
-						if (($array1['Message']['from_id'] == $array2['Message']['to_id']) || ($array1['Message']['from_id'] == $array2['Message']['from_id'])) {
-							if ($array1['Message']['created'] > $array2['Message']['created']) {	
-								for ($i = 0; $i < count($tempArray); $i++){
-									unset($tempArray[$i]);
-									$tempArray[] = $array1;
-									
-								}
-							}
-							break;
-						} 	
-					} else {
-						$tempArray[] = $array1; // if not match to existing element in temp array, insert new element to array
-						break; }	
-				}
-			}
+		$results = $this->Message->find('all', array(
+												'fields' => array('Message.to_id', 'Message.from_id'), 
+												'order' => array('Message.created' => 'desc')) );
+		$results = array_map('unserialize', array_unique(array_map('serialize',$results)));
+		foreach ($results as $array) {
+			$tempArray[] = $this->Message->find('first', array(
+						'order' => array('Message.created' => 'desc'),
+						'conditions' => array('Message.to_id' => $array['Message']['to_id'],
+											  'Message.from_id' => $array['Message']['from_id']) ));
 		}
-		
 		return $tempArray;
 	}
-	
 }
 ?>
