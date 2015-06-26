@@ -44,8 +44,13 @@ class MessageController extends AppController{
 	
 	public function reply() {
 		$message = $this->Message->findById($this->request->params['named']['id']);
-		$this->request->data['Message']['to_id'] = $message['Message']['from_id'];
-		$this->request->data['Message']['from_id'] = $message['Message']['to_id'];
+		if ($message['Message']['from_id'] == $this->Auth->user('id')){
+			$this->request->data['Message']['from_id'] = $message['Message']['from_id'];
+			$this->request->data['Message']['to_id'] = $message['Message']['to_id'];
+		} else {
+			$this->request->data['Message']['to_id'] = $message['Message']['from_id'];
+			$this->request->data['Message']['from_id'] = $message['Message']['to_id'];
+		}
 		if($this->Message->save($this->request->data)){
 			return $this->redirect(array('action' => 'index'));
 		}
@@ -79,7 +84,7 @@ class MessageController extends AppController{
 									  'or' => array('Message.to_id' => $this->Auth->user('id'),
 													'Message.from_id' => $this->Auth->user('id'))),
 						'order' => array('Message.created' => 'desc'),
-						'limit' => 5);
+						'limit' => 10);
 		$this->Paginator->settings = $options;
 		//debug($this->Message->find('all'));
 		$message_list = $this->Paginator->paginate('Message');
