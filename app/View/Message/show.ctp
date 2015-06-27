@@ -1,14 +1,10 @@
 <!-- /app/View/Elements/show.ctp -->
 <?php 
-	$this->Paginator->options(array(
-			'update' => '#content',
-			'evalScripts' => true,
-		));
-	if ($data['messages'] != null) { 
+	if (@$data['messages'] != null) { 
 		$message = $data['messages'];
 		$user = $data['user'];
 		$current_user = $this->Session->read('user_id');
-			
+		
 		foreach ($message as $msg) { 	?> 
 			<div class="row" id=<?php echo 'msg'.$msg['Message']['id']?>>
 				<div class="col-sm-2">
@@ -60,21 +56,23 @@
 					});
 				});
 			</script>
-		<?php 	} if ($data['page_number'] <= $data['total_pages']) { ?>
+		<?php 	} if ($data['page_number'] < $data['total_pages']) { ?>
 				<div id="show-more" style="text-align:center">
-					<?php echo $this->Html->link('Show More', array('controller' => 'message', 'action' => 'show', 'page' => $data['page_number']), array('class' => 'btn btn-link', 'style' => 'text-align:center')); ?>
+					<button class="btn btn-link" id="show-more" style="text-align:center">Show More</button>
 				</div>
 				
 				<script>
 					$(document).ready(function(){
-						var url = $(this).attr('href');
+						var url = '//message.local/message/show/'+<?php echo $data['page_number']; ?>;
 						$("#show-more").click(function() {
 							$.ajax({
 								url: url,
-								data: <?php echo $msg['Message']['id']; ?>,
 								type: 'POST',
-								success: function(){
-									$('#paginated-content-container').append(url);
+								success: function(data){
+									$.get(url, function(data) {
+										$("#show-more").hide();
+										$('#paginated-content-container').append(data);
+									});
 								}
 							});
 						});
@@ -82,4 +80,4 @@
 				</script>
 		<?php	} } else {?>
 			<div class="well well-lg" style="text-align:center" id="no-msg"><h1>No Messages</h1></div>
-		<?php } echo $this->Js->writeBuffer(); ?>
+		<?php } ?>

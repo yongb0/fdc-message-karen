@@ -78,24 +78,28 @@ class MessageController extends AppController{
 	
 	public function show() { //function for paginating messages
 		$this->loadModel('User');
-		$item_per_page = 10;
+		$item_per_page = 1;
+		$data['page_number'] = 1;
 		
-		//var_dump($this->request->params);
 		$message_list = $this->filter();
 		$data['total_rows'] = count($message_list);
 		$data['total_pages'] = ceil($data['total_rows']/$item_per_page);
 		for($i = 0; $i < $item_per_page; $i++){
 			if ($i < count($message_list)){
-			$data['messages'][$i] = $message_list[$i];
+				$data['messages'][$i] = $message_list[$i]; //one data
 			}
 		}
-		$data['page_number'] = 1;
-		$data['user'] = $this->User->find('all');
 		
-		if(isset($this->request->params['page'])) {
-			$page = $this->request->params['page'] - 1;
-			$data['messages'][$page];
+		
+		if (isset($this->request->params['page'])) {
+			$page = $this->request->params['page'];
+			$data['messages'][0] = $message_list[$page]; //add data
+			$data['page_number']+=1;
 		}
+		
+		
+		//var_dump($data);
+		$data['user'] = $this->User->find('all'); 
 		$this->set('data', $data);
 	}
 	
