@@ -18,16 +18,17 @@ class UserController extends AppController{
 	}
 	
 	public function register() {
+		$data = null;
 		if ($this->request->is('post')) {
+		
 			if ($this->User->save($this->request->data)) {
 				$this->User->saveField('image', 'user-default.png');
 				return $this->redirect(array('action' => 'thankyou'));
 			} else {
-				$data = 1; //for alert message when error occurs
-				$this->set('data', $data);
-			} 
+				$data = "Check input for error message."."\r\n"; //for alert message when error occurs
+			}
 		}
-		$this->set('data', $data = null);
+		$this->set('data', $data);
 	}
 	
 	public function update() {

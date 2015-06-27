@@ -61,33 +61,6 @@
 				});
 			</script>
 		<?php 	} 
-			if ($this->Paginator->hasNext()) {  ;
-				$page = $this->Paginator->param('page')+1; 
-				$url = $this->Paginator->url(array('page' => $page));
-				$total_pages = $this->Paginator->param('count');?>
-					
-				<div style="text-align:center">
-					<button class="btn btn-link" id="load-more">Show More</button>
-				</div>
-					
-				<script type="text/javascript">
-					$(document).ready(function(){
-						var track_click = 0;
-								
-						if (track_click < <?php echo $total_pages?>) {
-							$('#load-more').click(function() {
-								$('#load-more').remove();
-								$.get(<?php echo "'".$url."'"?>, function(data) {
-									$('#paginated-content-container').append(data);
-								});
-								$('#load-more').show();
-								track_click++;
-							});
-						} else {
-							$('#load-more').hide();
-								}
-					});
-				</script>
-		<?php 	} } else {?>
+			 } else {?>
 			<div class="well well-lg" style="text-align:center" id="no-msg"><h1>No Messages</h1></div>
 		<?php } echo $this->Js->writeBuffer(); ?>

@@ -7,6 +7,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/flatly/bootstrap.min.css" rel="stylesheet">
+	<?php echo $this->Html->script('custom', array('inline' => false)); ?>
 	
 </head>
 <body>
@@ -25,7 +26,7 @@
 		</div>
 	</div>
 	<br>
-	<?php echo $this->Html->script('custom', array('inline' => false)); ?>
 	<div id="paginated-content-container" class="container"></div>
+	<div id="ajax-loader" style="text-align:center; display:none"><img src="/img/ajax-loader.gif"></div>
 </body>
 </html>

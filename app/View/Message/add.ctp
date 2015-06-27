@@ -42,8 +42,9 @@
 				<?php echo $this->Form->create('Message');?> 
 				<select class="js-example-basic-single" id="select2" style="width:500px" name="to_id">
 				  <?php foreach ($data['users'] as $user) {
+						if($user['User']['id'] != $this->Session->read('user_id')) {
 						?><option value=<?php echo $user['User']['id'];?> > <?php echo $user['User']['name']; ?> </option> <?php
-					} ?>
+					} } ?>
 				</select>
 				<script type="text/javascript">
 					$(document).ready(function () { //for select2 plugin

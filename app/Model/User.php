@@ -9,19 +9,16 @@ class User extends AppModel{
 				'message' => 'Name should be 5 to 20 characters.')
 		),
 		'email' => array(
-			'required' => array(
 				'rule' => array('isUnique', 'email'),
-				'message' => 'Invalid e-mail or e-mail already exists.')
+				'message' => 'Invalid email. Email already exists or invalid format.'
 		),
 		'password' => array(
-			'required' => array(
-				'rule' => array('notEmpty'),
-				'message' => 'Password is required')
+				'rule' => 'passwordValidate',
+				'message' => 'Invalid password. Only numbers, letters and at least 6 characters.'
 		),
 		're_password' => array(
-			'required' => array(
 				'rule' => array('equalToField', 'password'),
-				'message' => 'Re-type password')
+				'message' => 'Input does not match with password.'
 		),
 		'image' => array(
 			'rule' => array(
@@ -45,6 +42,12 @@ class User extends AppModel{
 	
 	public function equalToField($array, $field) {
 		return strcmp($this->data[$this->alias][key($array)], $this->data[$this->alias][$field]) == 0;
-}
+	}
+	
+	public function passwordValidate($data){
+		$value = array_values($data);
+		$value = $value[0];
+		return 	preg_match('/^[a-zA-Z0-9]{6,}+$/', $value);
+	}
 }
 ?>

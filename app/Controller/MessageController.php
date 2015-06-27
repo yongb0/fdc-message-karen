@@ -79,32 +79,69 @@ class MessageController extends AppController{
 	public function show() { //function for paginating messages
 		$this->loadModel('User');
 		$this->Message->setControllerAction('show');
-		$options = array (
+		$item_per_page = 1;
+		/*$options = array (
 						'conditions' => array(
 									  'or' => array('Message.to_id' => $this->Auth->user('id'),
 													'Message.from_id' => $this->Auth->user('id'))),
 						'order' => array('Message.created' => 'desc'),
 						'limit' => 10);
 		$this->Paginator->settings = $options;
-		$message_list = $this->Paginator->paginate('Message');
+		$message_list = $this->Paginator->paginate('Message');*/	
 		$data['messages'] = $this->filter();
+		$total_rows = count($data['messages']);
+		$total_pages = ceil($total_rows/$item_per_page);
+		
 		$data['user'] = $this->User->find('all');
 		$this->set('data', $data);
 	}
 	
 	public function filter() { //function to filter messages to get unique and latest messages
 		$tempArray = array();
+		$dummyArray = array();
+		//filter to get only messages that the user is included
 		$results = $this->Message->find('all', array(
+												'conditions' => array(
+													'or' => array('Message.to_id' => $this->Auth->user('id'),
+																  'Message.from_id' => $this->Auth->user('id')) ),
 												'fields' => array('Message.to_id', 'Message.from_id'), 
 												'order' => array('Message.created' => 'desc')) );
+		//remove duplicate entries
 		$results = array_map('unserialize', array_unique(array_map('serialize',$results)));
+		
+		//filter the result to get only the latest between conversations
 		foreach ($results as $array) {
 			$tempArray[] = $this->Message->find('first', array(
 						'order' => array('Message.created' => 'desc'),
 						'conditions' => array('Message.to_id' => $array['Message']['to_id'],
 											  'Message.from_id' => $array['Message']['from_id']) ));
+			foreach ($tempArray as $array1) {
+				if ($dummyArray == null) {
+					$dummyArray[] = $array1; //insert the first element from the passed array to put value in dummyArray
+				} else {
+					foreach ($tempArray as $array2) {
+						if (($array1['Message']['to_id'] == $array2['Message']['to_id']) || ($array1['Message']['to_id'] == $array2['Message']['from_id'])) {
+							if (($array1['Message']['from_id'] == $array2['Message']['to_id']) || ($array1['Message']['from_id'] == $array2['Message']['from_id'])) {
+								if ($array1['Message']['created'] > $array2['Message']['created']) {	
+									for ($i = 0; $i < count($tempArray); $i++){
+										unset($tempArray[$i]);
+										$dummyArray[] = $array1;
+									}
+								}
+								break;
+							} 	
+						} else {
+							$dummyArray[] = $array1; // if not match to existing element in temp array, insert new element to array
+							break; }	
+					}
+				}
+			}
 		}
-		return $tempArray;
+		//to make sure there are no duplicate entries
+		$finalList = array_map('unserialize', array_unique(array_map('serialize',$dummyArray)));
+		
+		//return the final list
+		return $finalList;
 	}
 }
 ?>
