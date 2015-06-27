@@ -30,6 +30,7 @@
  */
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 	Router::connect('/message/details/:id', array('controller' => 'message', 'action' =>'details'), array('id' => '[0-9]+'));
+	Router::connect('/message/show/:page', array('controller' => 'message', 'action' =>'show'), array('page' => '[0-9]+'));
 
 /**
  * Load all plugin routes. See the CakePlugin documentation on

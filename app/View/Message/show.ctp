@@ -60,7 +60,26 @@
 					});
 				});
 			</script>
-		<?php 	} 
-			 } else {?>
+		<?php 	} if ($data['page_number'] <= $data['total_pages']) { ?>
+				<div id="show-more" style="text-align:center">
+					<?php echo $this->Html->link('Show More', array('controller' => 'message', 'action' => 'show', 'page' => $data['page_number']), array('class' => 'btn btn-link', 'style' => 'text-align:center')); ?>
+				</div>
+				
+				<script>
+					$(document).ready(function(){
+						var url = $(this).attr('href');
+						$("#show-more").click(function() {
+							$.ajax({
+								url: url,
+								data: <?php echo $msg['Message']['id']; ?>,
+								type: 'POST',
+								success: function(){
+									$('#paginated-content-container').append(url);
+								}
+							});
+						});
+					});
+				</script>
+		<?php	} } else {?>
 			<div class="well well-lg" style="text-align:center" id="no-msg"><h1>No Messages</h1></div>
 		<?php } echo $this->Js->writeBuffer(); ?>
