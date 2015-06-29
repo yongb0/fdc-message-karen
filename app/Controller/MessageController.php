@@ -15,6 +15,8 @@ class MessageController extends AppController{
 			$data['alert'] = null;
 			$this->loadModel('User');
 			if ($this->request->is('post')) {
+				date_default_timezone_set('US/Pacific');
+				$this->request->data['Message']['created'] = date('Y:m:d H:i:s');
 				$this->request->data['Message']['from_id'] = $this->Auth->user('id');
 				$this->request->data['Message']['to_id'] = $this->request->data['to_id'];
 				if ($this->Message->save($this->request->data)) {
@@ -44,6 +46,8 @@ class MessageController extends AppController{
 	
 	public function reply() {
 		$message = $this->Message->findById($this->request->params['named']['id']);
+		date_default_timezone_set('US/Pacific');
+		$this->Message->saveField('created', date('Y:m:d H:i:s'));
 		if ($message['Message']['from_id'] == $this->Auth->user('id')){
 			$this->request->data['Message']['from_id'] = $message['Message']['from_id'];
 			$this->request->data['Message']['to_id'] = $message['Message']['to_id'];
@@ -86,19 +90,18 @@ class MessageController extends AppController{
 		$data['total_pages'] = ceil($data['total_rows']/$item_per_page);
 		for($i = 0; $i < $item_per_page; $i++){
 			if ($i < count($message_list)){
-				$data['messages'][$i] = $message_list[$i]; //one data
+				$data['messages'][$i] = $message_list[$i]; //first page records
 			}
 		}
-		
-		
 		if (isset($this->request->params['page'])) {
 			$page = $this->request->params['page'];
-			$data['messages'][0] = $message_list[$page]; //add data
+			$index = 0;
+			for($i = $item_per_page*$page; $i < $item_per_page*($page+1); $i++ ) {
+				$data['messages'][$index] = $message_list[$i]; //add data
+				$index++;
+			}
 			$data['page_number']+=1;
 		}
-		
-		
-		//var_dump($data);
 		$data['user'] = $this->User->find('all'); 
 		$this->set('data', $data);
 	}

@@ -25,9 +25,9 @@
 			<tr> 
 				<td rowspan="6" style="width:10%">
 					<?php if (!$user['User']['image']) {
-						echo $this->Html->image('user-default.png', array('class' => 'img-circle', 'width' => '200', 'height' => '200'));
+						echo $this->Html->image('/img/tmp/'.'user-default.png', array('class' => 'img-circle', 'width' => '200', 'height' => '200'));
 						} else {
-						echo $this->Html->image($user['User']['image'], array('class' => 'img-circle', 'width' => '200', 'height' => '200'));
+						echo $this->Html->image('/img/tmp/'.$user['User']['image'], array('class' => 'img-circle', 'width' => '200', 'height' => '200'));
 						} ?>
 				</td>
 				<td style="font-size:30px;"><?php print_r($user['User']['name']);?></td>

@@ -40,7 +40,7 @@ class User extends AppModel{
 		return true;
 	}
 	
-	public function equalToField($array, $field) {
+	public function equalToField($array, $field){
 		return strcmp($this->data[$this->alias][key($array)], $this->data[$this->alias][$field]) == 0;
 	}
 	

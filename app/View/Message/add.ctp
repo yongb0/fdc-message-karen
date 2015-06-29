@@ -40,7 +40,7 @@
 			</div>
 			<div class="col-sm-11">
 				<?php echo $this->Form->create('Message');?> 
-				<select class="js-example-basic-single" id="select2" style="width:500px" name="to_id">
+				<select class="js-example-basic-single" id="select2" style="width:500px" name="to_id" required>
 				  <?php foreach ($data['users'] as $user) {
 						if($user['User']['id'] != $this->Session->read('user_id')) {
 						?><option value=<?php echo $user['User']['id'];?> > <?php echo $user['User']['name']; ?> </option> <?php
@@ -60,7 +60,7 @@
 					echo $this->Form->textarea('content', array('label' => false, 'class' => 'form-control', 'placeholder' => 'Enter message') );
 				?>  <br> <?php	
 					echo $this->Form->input('created', array('type' => 'hidden', 'value' =>  date('Y:m:d H:i:s')));
-					echo $this->Form->submit('Send Message', array('class' => 'btn btn-primary btn-md'));
+					echo $this->Form->submit('Send Message', array('class' => 'btn btn-primary btn-md', 'id' => 'submit-btn'));
 					echo $this->Form->end();
 				?>
 			</div>
