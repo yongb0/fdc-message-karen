@@ -22,22 +22,28 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version());
 <!DOCTYPE html>
 <html>
 <head>
+	<head>
 	<?php echo $this->Html->charset(); ?>
 
 	<?php
+		echo $this->fetch('meta');
 		echo $this->Html->meta('icon');
 
 		echo $this->Html->css('bootstrap.min');
+	?>
+		<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/flatly/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		
+		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<?php	
 		echo $this->Html->script('jquery.min.js');
-
-		echo $this->fetch('meta');
-		echo $this->fetch('css');
 		echo $this->fetch('script');
 	?>
+		
+	
 </head>
 <body>
-	<div id="container">
+	<div id="container" class="container">
 		<div id="content">
 			
 			<?php echo $this->Session->flash(); ?>
@@ -49,8 +55,5 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version());
 			<p>&nbsp&nbsp&nbspTraining Task: Message Board </p>
 		</footer>
 	</div>
-	<?php 
-		echo $this->Html->script('bootstrap.min'); 
-	?>
 </body>
 </html>

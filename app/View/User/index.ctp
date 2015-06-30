@@ -1,16 +1,4 @@
 <!-- /app/View/Users/index.ctp -->
-
-<!DOCTYPE html>
-<html>
-<head>
-	<title>User Profile</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/flatly/bootstrap.min.css" rel="stylesheet">
-	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-</head>
-<body>
-	<div class="container">
 	<?php
 		$this->startIfEmpty('navbar');
 		echo $this->element('navbar');
@@ -70,6 +58,3 @@
 				</td>
 			</tr>
 		</table>
-	</div>
-</body>
-</html>

@@ -1,17 +1,5 @@
 <!-- /app/View/Users/update.ctp -->
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Update Profile</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/flatly/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-	
-</head>
-<body>
-	<div class="container">
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 		<?php 
 			$user = $data['user'];
 			switch($data['alert']) {
@@ -90,6 +78,3 @@
 				echo $this->Form->end();
 			?>
 		</div>	
-	</div>
-</body>
-</html>

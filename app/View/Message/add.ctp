@@ -1,18 +1,9 @@
 <!-- /app/View/Message/new.ctp -->
 
-<!DOCTYPE html>
-<html>
-<head>
-<title>New Message</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/flatly/bootstrap.min.css" rel="stylesheet">
 	<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
 	<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.full.min.js"></script>
-	
-</head>
-<body>
-	<div class="container">
+
 		<?php 
 			switch($data['alert']) {
 				case 1: ?>
@@ -69,6 +60,3 @@
 				?>
 			</div>
 		</div>
-	</div>
-</body>
-</html>
