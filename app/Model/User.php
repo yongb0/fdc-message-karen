@@ -10,11 +10,11 @@ class User extends AppModel{
 		),
 		'email' => array(
 			'required' => array(
-				'rule' => array('isUnique', 'email'),
-				'message' => 'Invalid email. Email already exists or invalid format.')
+				'rule' => array('isUnique', 'email', 'notEmpty'),
+				'message' => 'Invalid email. Email already exists or invalid format. And must not be empty.')
 		),
 		'password' => array(
-				'rule' => 'passwordValidate',
+				'rule' => array('passwordValidate','notEmpty'),
 				'message' => 'Invalid password. Only numbers, letters and at least 6 characters.'
 		),
 		're_password' => array(
