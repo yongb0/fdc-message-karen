@@ -3,6 +3,7 @@
 	if (@$data['messages'] != null) { 
 		$message = $data['messages'];
 		$user = $data['user'];
+		
 		$current_user = $this->Session->read('user_id');
 		
 		foreach ($message as $msg) { 	?> 
@@ -17,8 +18,8 @@
 										?> <br><center><strong> <?php echo $sender['User']['name']; ?> </center></strong> 
 						<?php 	} } } else { 
 								foreach ($user as $sender) {
-									if ('/img/tmp/'.$msg['Message']['to_id'] == $sender['User']['id']) { 
-										echo $this->Html->image($sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));
+									if ($msg['Message']['to_id'] == $sender['User']['id']) { 
+										echo $this->Html->image('/img/tmp/'.$sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));
 										?> <br><center><strong> <?php echo $sender['User']['name']; ?> </center></strong> 
 						<?php 	} } } ?>
 					</div>
@@ -60,9 +61,11 @@
 				<div style="text-align:center">
 					<button class="btn btn-link" id="show-more" style="text-align:center" >Show More</button>
 				</div>
-		<?php	} } if($data['messages'] == null) {?>
+		<?php	} } else {?>
 			<script>
-				$(document).show('#no-msg');
+				$(document).ready(function(){
+					$('#no-msg').show();
+				});
 			</script>
 		<?php } ?>
 			<div class="well well-lg" style="text-align:center; display:none" id="no-msg"><h1>No Messages</h1></div>

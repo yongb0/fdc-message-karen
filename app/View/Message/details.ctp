@@ -23,9 +23,11 @@
 			<div class="col-sm-4"></div>
 			<div class="col-sm-8">
 				<?php
-					echo $this->Form->create('Message', array('url' => array('controller' => 'message', 'action' => 'reply', 'id' => $this->Session->read('message_id'))));
+					echo $this->Form->create('Message', array('url' => array('controller' => 'message', 'action' => 'reply')));
 					echo $this->Form->textarea('content', array('class' => 'form-control', 'label' => false, 'placeholder' => 'Enter reply...'));
 					echo $this->Form->input('created', array('type' => 'hidden', 'value' =>  date('Y:m:d H:i:s')));
+					echo $this->Form->input('to_id', array('type' => 'hidden', 'value' =>  $this->Session->read('message_to_id')));
+					echo $this->Form->input('from_id', array('type' => 'hidden', 'value' => $this->Session->read('message_from_id')));
 					echo $this->Form->submit('Reply', array('class' => 'btn btn-success btn-sm pull-right'));
 					echo $this->Form->end();
 				?>

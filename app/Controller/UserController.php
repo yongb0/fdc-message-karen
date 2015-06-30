@@ -19,7 +19,7 @@ class UserController extends AppController{
 	
 	public function register() {
 		$data = null;
-		if ($this->request->is('post')) {
+		if ($this->request->is('post','put')) {
 		
 			if ($this->User->save($this->request->data)) {
 				date_default_timezone_set('US/Pacific');

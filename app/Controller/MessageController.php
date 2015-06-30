@@ -38,25 +38,28 @@ class MessageController extends AppController{
 								 array($message['Message']['to_id'], $message['Message']['from_id']),
 								 array($message['Message']['to_id'], $message['Message']['from_id']),
 								 array(), array('Message.created' => 'desc'));
-			$this->Session->write('message_id', $this->request->params['id']);
+			$this->Session->write('message_to_id', $message['Message']['to_id']);
+			$this->Session->write('message_from_id', $message['Message']['from_id']);
 			$data['user'] = $this->User->find('all');
 			$this->set('data', $data);
 		}
 	}
 	
 	public function reply() {
-		$message = $this->Message->findById($this->request->params['named']['id']);
-		date_default_timezone_set('US/Pacific');
-		$this->Message->saveField('created', date('Y:m:d H:i:s'));
-		if ($message['Message']['from_id'] == $this->Auth->user('id')){
-			$this->request->data['Message']['from_id'] = $message['Message']['from_id'];
-			$this->request->data['Message']['to_id'] = $message['Message']['to_id'];
-		} else {
-			$this->request->data['Message']['to_id'] = $message['Message']['from_id'];
-			$this->request->data['Message']['from_id'] = $message['Message']['to_id'];
-		}
-		if($this->Message->save($this->request->data)){
-			return $this->redirect(array('action' => 'index'));
+		if ($this->request->is('post')) {
+			$message = $this->request->data;
+			date_default_timezone_set('US/Pacific');
+			$this->Message->saveField('created', date('Y:m:d H:i:s'));
+			if ($message['Message']['from_id'] == $this->Auth->user('id')){
+				$this->request->data['Message']['from_id'] = $message['Message']['from_id'];
+				$this->request->data['Message']['to_id'] = $message['Message']['to_id'];
+			} else {
+				$this->request->data['Message']['to_id'] = $message['Message']['from_id'];
+				$this->request->data['Message']['from_id'] = $message['Message']['to_id'];
+			}
+			if($this->Message->save($this->request->data)){
+				return $this->redirect(array('action' => 'index'));
+			}
 		}
 	}
 	
@@ -81,12 +84,10 @@ class MessageController extends AppController{
 	}
 	
 	public function show() { //function for paginating messages
-		
-		$this->layout = "ajax";
-		
 		$this->loadModel('User');
 		$item_per_page = 1;
 		$data['page_number'] = 1;
+		$message_list = $this->filter();
 		$message_list = $this->filter();
 		$data['total_rows'] = count($message_list);
 		$data['total_pages'] = ceil($data['total_rows']/$item_per_page);
@@ -108,7 +109,7 @@ class MessageController extends AppController{
 				}
 			}
 		}
-		//var_dump($data);
+		
 		$data['user'] = $this->User->find('all'); 
 		$this->set('data', $data);
 	}
@@ -160,11 +161,6 @@ class MessageController extends AppController{
 		$finalList = array_values($finalList);
 		//return the final list
 		return $finalList;
-	}
-	
-	public function validateDate($date, $format = 'Y-m-d H:i:s') {
-		$d = DateTime::createFromFormat($format, $date);
-		return $d && $d->format($format) == $date;
 	}
 }
 ?>
