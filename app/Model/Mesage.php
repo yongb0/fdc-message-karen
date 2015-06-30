@@ -14,6 +14,10 @@ class Message extends AppModel{
 		'from_id' => array(
 			'required' => array(
 				'rule' => 'notEmpty')
+			),
+		'to_id' => array(
+			'required' => array(
+				'rule' => 'notEmpty')
 			)
 	);
 }	
