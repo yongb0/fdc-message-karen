@@ -34,9 +34,9 @@
 			<h1>User Profile</h1>
 		</div>
 		<br>
-		<?php echo $this->Form->create('User', array('enctype' => 'multipart/form-data'));?>
+		<?php echo $this->Form->create('User');?>
 		<div class="col-sm-3">
-			<img id="uploadPreview" style="width: 200px; height: 200px;" class="img-circle" src=<?php echo '/img/tmp/'.$user['User']['image']?>>
+			<img id="uploadPreview" style="width: 200px; height: 200px;" class="img-circle" src=<?php echo '/img/'.$user['User']['image']?>>
 				<?php echo $this->Form->input('image', array('id' => 'image', 'type' => 'file', 'onchange' => 'PreviewImage();', 'label' => false));?>
 				<script type="text/javascript">
 				  function PreviewImage() {
@@ -56,16 +56,10 @@
 					</tr>
 					<tr>
 						<td>Birthdate:
-							<?php echo $this->Form->input('birthdate', array('id' => 'birthdate', 'type' => 'text', 'class' => 'form-control', 'value' => $user['User']['birthdate'], 'label' => false, 'readonly' => 'readonly'));?>
+							<?php echo $this->Form->input('birthdate', array('id' => 'birthdate', 'type' => 'text', 'class' => 'form-control', 'placeholder' => $user['User']['birthdate'], 'label' => false));?>
 							<script>
-							var currentTime = new Date();
 							  $(function() {
-								$( "#birthdate" ).datepicker( {
-									changeMonth: true,
-									changeYear: true,
-									minDate: new Date(currentTime.getYear() - 100, currentTime.getMonth() -1, +1), //up until 100 years, one month and one day ago
-									maxDate: new Date(currentTime.getFullYear() - 18, currentTime.getMonth() +1, -1) //until 18 years, one month and one day ago; age restriction of 18 years old
-								});
+								$( "#birthdate" ).datepicker();
 							  });
 							</script>
 						</td>
