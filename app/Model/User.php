@@ -9,8 +9,9 @@ class User extends AppModel{
 				'message' => 'Name should be 5 to 20 characters.')
 		),
 		'email' => array(
+			'required' => array(
 				'rule' => array('isUnique', 'email'),
-				'message' => 'Invalid email. Email already exists or invalid format.'
+				'message' => 'Invalid email. Email already exists or invalid format.')
 		),
 		'password' => array(
 				'rule' => 'passwordValidate',

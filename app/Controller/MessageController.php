@@ -49,7 +49,7 @@ class MessageController extends AppController{
 		if ($this->request->is('post')) {
 			$message = $this->request->data;
 			date_default_timezone_set('US/Pacific');
-			$this->Message->saveField('created', date('Y:m:d H:i:s'));
+			$this->request->data['Message']['created'] = date('Y:m:d H:i:s');
 			if ($message['Message']['from_id'] == $this->Auth->user('id')){
 				$this->request->data['Message']['from_id'] = $message['Message']['from_id'];
 				$this->request->data['Message']['to_id'] = $message['Message']['to_id'];

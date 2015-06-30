@@ -37,4 +37,3 @@
 			});
 		});
 	</script>
-	<div id="ajax-loader" style="text-align:center; display:none"><img src="/img/ajax-loader.gif"></div>

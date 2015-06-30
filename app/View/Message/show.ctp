@@ -25,7 +25,7 @@
 					</div>
 				</div>
 				<div class="col-sm-8"> <br>
-					<div class="well well-sm">
+					<div class="well well-sm" style="word-wrap:break-word">
 						<table>
 							<tr><?php echo $msg['Message']['content'];?>
 								<td> <br> <div class="btn-group"> 
@@ -68,4 +68,4 @@
 				});
 			</script>
 		<?php } ?>
-			<div class="well well-lg" style="text-align:center; display:none" id="no-msg"><h1>No Messages</h1></div>
+			<br><div class="well well-lg" style="text-align:center; display:none" id="no-msg"><h1>No Messages</h1></div>

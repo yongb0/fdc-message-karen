@@ -45,7 +45,7 @@
 							<?php 
 								foreach ($user as $sender) {
 								if ($msg['Message']['from_id'] == $sender['User']['id']) { 
-									echo $this->Html->image($sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));
+									echo $this->Html->image('/img/tmp/'.$sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));
 									?> <br><center><strong> <?php echo $sender['User']['name']; ?> </center></strong> 
 							<?php } }?>
 							</div>
@@ -81,7 +81,7 @@
 							<?php 
 								foreach ($user as $sender) {
 								if ($msg['Message']['from_id'] == $sender['User']['id']) { 
-									echo $this->Html->image($sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));?> 
+									echo $this->Html->image('/img/tmp/'.$sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));?> 
 									<br><center><strong>You</center></strong> 
 							<?php } }?>
 						</div>
