@@ -45,12 +45,12 @@
 							<?php 
 								foreach ($user as $sender) {
 								if ($msg['Message']['from_id'] == $sender['User']['id']) { 
-									echo $this->Html->image($sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));
+									echo $this->Html->image('/img/tmp/'.$sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));
 									?> <br><center><strong> <?php echo $sender['User']['name']; ?> </center></strong> 
 							<?php } }?>
 							</div>
 						</div>
-						<div class="col-sm-8"> <br>
+						<div class="col-sm-8" style="word-wrap:break-word"> <br>
 							<div class="well well-sm pull-left">
 								<table>
 									<tr> <?php echo $msg['Message']['content'];?></tr>
@@ -65,7 +65,7 @@
 			<?php  } else { ?> <!-- Current user -->
 				<div class="row" id=<?php echo 'msg'.$msg['Message']['id']?>>
 					<div class="col-sm-2"></div> 
-					<div class="col-sm-8"> <br>
+					<div class="col-sm-8" style="word-wrap:break-word"> <br>
 						<div class="well well-sm pull-right">
 							<table class="pull-right">
 								<tr> <?php echo $msg['Message']['content'];?></tr>
@@ -81,7 +81,7 @@
 							<?php 
 								foreach ($user as $sender) {
 								if ($msg['Message']['from_id'] == $sender['User']['id']) { 
-									echo $this->Html->image($sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));?> 
+									echo $this->Html->image('/img/tmp/'.$sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));?> 
 									<br><center><strong>You</center></strong> 
 							<?php } }?>
 						</div>

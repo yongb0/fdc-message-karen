@@ -8,7 +8,7 @@
 		
 		foreach ($message as $msg) { 	?> 
 			<div class="row" id=<?php echo 'msg'.$msg['Message']['id']?> data-page="<?php echo $data['page_number']; ?>">
-				<div class="col-sm-2">
+				<div class="col-sm-2" style="word-wrap:break-word">
 					<div class="pull-right">
 						<?php 
 							if ($msg['Message']['to_id'] == $current_user) {
@@ -24,7 +24,7 @@
 						<?php 	} } } ?>
 					</div>
 				</div>
-				<div class="col-sm-8"> <br>
+				<div class="col-sm-8" style="word-wrap:break-word"> <br>
 					<div class="well well-sm">
 						<table>
 							<tr><?php echo $msg['Message']['content'];?>
