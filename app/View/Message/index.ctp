@@ -8,6 +8,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/flatly/bootstrap.min.css" rel="stylesheet">
 	<?php echo $this->Html->script('custom', array('inline' => false)); ?>
+	
 </head>
 <body>
 	<div class="container">
@@ -26,6 +27,27 @@
 	</div>
 	<br>
 	<div id="paginated-content-container" class="container"></div>
+	<script>
+		$(document).ready(function(){
+			var track_click = 1;
+			var url = '/message/show/';
+			$(document).on('click', '#show-more',function() {
+				$.ajax({
+				url: url,
+				type: 'POST',
+				data: {"page_number": track_click},
+				success: function(data){
+					$('#show-more').remove();
+					$('#paginated-content-container').append(data);
+					track_click++;
+					}, 
+				error: function(data,status,xhr){
+					alert(xhr);
+					}
+				});
+			});
+		});
+	</script>
 	<div id="ajax-loader" style="text-align:center; display:none"><img src="/img/ajax-loader.gif"></div>
 </body>
 </html>

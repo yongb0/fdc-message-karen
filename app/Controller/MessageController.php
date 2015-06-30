@@ -60,8 +60,6 @@ class MessageController extends AppController{
 			if($this->Message->save($this->request->data)){
 				return $this->redirect(array('action' => 'index'));
 			}
-		} else {
-			$this->redirect(array('action' => 'index'));
 		}
 	}
 	
