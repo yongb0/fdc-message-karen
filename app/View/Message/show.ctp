@@ -26,12 +26,13 @@
 				</div>
 				<div class="col-sm-8"> <br>
 					<div class="well well-sm" style="word-wrap:break-word">
+						<div id="msg-box"><?php echo $msg['Message']['content'];?></div>
 						<table>
-							<tr><?php echo $msg['Message']['content'];?>
+							<tr>
 								<td> <br> <div class="btn-group"> 
 								<?php echo $this->Html->link('Reply', array('controller' => 'message', 'action' => 'details', 'id' => $msg['Message']['id']), array('class' => 'btn btn-default btn-sm'));
 									  echo $this->Html->link('Delete', array('controller' => 'message', 'action' => 'delete_list', 'id' => $msg['Message']['id']), array('class' => 'btn btn-primary btn-sm', 'id' => 'delete'.$msg['Message']['id']));?>
-								</td>
+								</div></td>
 								<td><br><strong class="pull-left"><small>&nbsp&nbsp&nbsp&nbspSent: <?php echo $msg['Message']['created']?></small></strong></td>
 							</tr>	
 						</table>

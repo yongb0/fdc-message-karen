@@ -41,29 +41,24 @@
 							</div>
 						</div>
 						<div class="col-sm-8"> <br>
-							<div class="well well-sm pull-left">
-								<table>
-									<tr> <?php echo $msg['Message']['content'];?></tr>
-									<tr>
-										<td><br><?php echo $this->Html->link(null, array('controller' => 'message', 'action' => 'delete', 'id' => $msg['Message']['id']), array('class' => 'btn glyphicon glyphicon-remove', 'id' => 'delete'.$msg['Message']['id'])); ?></td>
-										<td><br><strong><small>Sent: <?php echo $msg['Message']['created']?></small></strong></td>
-									</tr>	
-								</table>
+							<div class="well well-sm">
+								<div id="msg-box" style="word-wrap:break-word; text-align:left"><?php echo $msg['Message']['content'];?></div>
+								<br><?php echo $this->Html->link(null, array('controller' => 'message', 'action' => 'delete', 'id' => $msg['Message']['id']), array('class' => 'btn glyphicon glyphicon-remove', 'id' => 'delete'.$msg['Message']['id'], 'style' => 'vertical-align:middle')); ?>
+								<strong><small>Sent: <?php echo $msg['Message']['created']?></small></strong>
 							</div>
 						</div>
+						<div class="col-sm-2"></div> 
 					</div>
 			<?php  } else { ?> <!-- Current user -->
 				<div class="row" id=<?php echo 'msg'.$msg['Message']['id']?>>
 					<div class="col-sm-2"></div> 
 					<div class="col-sm-8"> <br>
-						<div class="well well-sm" style="word-wrap:break-word; text-align:right">
-								<?php echo $msg['Message']['content'];?>
-							<table>
-								<tr>
-									<td><br><strong><small>Sent: <?php echo $msg['Message']['created']?></small></strong></td>
-									<td><br><?php echo $this->Html->link(null, array('controller' => 'message', 'action' => 'delete', 'id' => $msg['Message']['id']), array('class' => 'btn glyphicon glyphicon-remove', 'id' => 'delete'.$msg['Message']['id'], 'style' => 'float:right')); ?></td>
-								</tr>	
-							</table>
+						<div class="well well-sm">
+							<div id="msg-box" style="word-wrap:break-word; text-align:right"><?php echo $msg['Message']['content'];?></div>
+							<div style="text-align:right">
+								<br><strong><small>Sent: <?php echo $msg['Message']['created']?></small></strong>
+								<?php echo $this->Html->link(null, array('controller' => 'message', 'action' => 'delete', 'id' => $msg['Message']['id']), array('class' => 'btn glyphicon glyphicon-remove', 'id' => 'delete'.$msg['Message']['id'], 'style' => 'vertical-align:middle')); ?>
+							</div>
 						</div>
 					</div>
 					<div class="col-sm-2">
