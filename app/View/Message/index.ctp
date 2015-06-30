@@ -1,5 +1,5 @@
 <!-- /app/View/Message/index.ctp -->
-
+<title>Message List</title>
 
 	<?php echo $this->Html->script('custom', array('inline' => false)); ?>
 		<?php

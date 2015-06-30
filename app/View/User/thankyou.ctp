@@ -1,5 +1,5 @@
 <!-- /app/View/Users/thankyou.ctp -->
-
+<title>Thank You!</title>
 	<div class="container" style="text-align:center">
 		<div class="jumbotron">
 			<h1>Thank you for registering!</h1>

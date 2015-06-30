@@ -1,4 +1,5 @@
 <!-- /app/View/Users/index.ctp -->
+<title>Profile</title>
 	<?php
 		$this->startIfEmpty('navbar');
 		echo $this->element('navbar');

@@ -1,6 +1,6 @@
 <!-- /app/View/Users/login.ctp -->
 
-
+<title>Log In</title>
 	<?php 
 	switch($data) {
 	case 1: ?>
