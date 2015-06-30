@@ -31,15 +31,21 @@ class MessageController extends AppController{
 	
 	public function details() {
 		if ($this->Auth->login()) {
+			if (isset($this->request->params['id'])) {
+				$message = $this->Message->findById($this->request->params['id']);	
+				$this->Session->write('message_to_id', $message['Message']['to_id']);
+				$this->Session->write('message_from_id', $message['Message']['from_id']);
+			}
+			$this->Paginator->settings = array(
+				'conditions' => array(
+						'Message.to_id' => array($this->Session->read('message_from_id'), $this->Session->read('message_to_id')),
+						'Message.from_id' => array($this->Session->read('message_from_id'), $this->Session->read('message_to_id'))),
+				'order' => array('Message.created' => 'desc'),
+				'limit' => 5);
+			$data['messages'] = $this->Paginator->paginate('Message');
+			
 			$this->loadModel('User');
 			
-			$message = $this->Message->findById($this->request->params['id']);
-			$data['messages'] = $this->Message->findAllByToIdAndFromId(
-								 array($message['Message']['to_id'], $message['Message']['from_id']),
-								 array($message['Message']['to_id'], $message['Message']['from_id']),
-								 array(), array('Message.created' => 'desc'));
-			$this->Session->write('message_to_id', $message['Message']['to_id']);
-			$this->Session->write('message_from_id', $message['Message']['from_id']);
 			$data['user'] = $this->User->find('all');
 			$this->set('data', $data);
 		}

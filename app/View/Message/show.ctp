@@ -1,4 +1,4 @@
-<!-- /app/View/Elements/show.ctp -->
+<!-- /app/View/Message/show.ctp -->
 <?php 
 	if (@$data['messages'] != null) { 
 		$message = $data['messages'];
