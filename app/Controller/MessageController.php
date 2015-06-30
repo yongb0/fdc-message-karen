@@ -81,28 +81,36 @@ class MessageController extends AppController{
 	}
 	
 	public function show() { //function for paginating messages
+		$reqData = json_decode($this->request->input());
+		$this->layout = "ajax";
+		
 		$this->loadModel('User');
 		$item_per_page = 1;
 		$data['page_number'] = 1;
-		
 		$message_list = $this->filter();
 		$data['total_rows'] = count($message_list);
 		$data['total_pages'] = ceil($data['total_rows']/$item_per_page);
-		for($i = 0; $i < $item_per_page; $i++){
-			if ($i < count($message_list)){
-				$data['messages'][$i] = $message_list[$i]; //first page records
-			}
-		}
-		if (isset($this->request->params['page'])) {
-			$page = $this->request->params['page'];
+		$data['user'] = $this->User->find('all'); 
+			
+		if (isset($reqData->page_number)) {
+			$page = $reqData->page_number;
 			$index = 0;
 			for($i = $item_per_page*$page; $i < $item_per_page*($page+1); $i++ ) {
-				$data['messages'][$index] = $message_list[$i]; //add data
-				$index++;
+				if ($i < $data['total_rows']){
+					$data['messages'][$index] = $message_list[$i]; //add data
+					$index++;
+				}
 			}
 			$data['page_number']+=1;
+			echo json_encode($data);
+			exit;
+		} else {
+			for($i = 0; $i < $item_per_page; $i++){
+				if ($i < $data['total_rows']){
+					$data['messages'][$i] = $message_list[$i]; //first page records
+				}
+			}
 		}
-		$data['user'] = $this->User->find('all'); 
 		$this->set('data', $data);
 	}
 	
@@ -118,7 +126,7 @@ class MessageController extends AppController{
 												'order' => array('Message.created' => 'desc')) );
 		//remove duplicate entries
 		$results = array_map('unserialize', array_unique(array_map('serialize',$results)));
-		
+	
 		//filter the result to get only the latest between conversations
 		foreach ($results as $array) {
 			$tempArray[] = $this->Message->find('first', array(
@@ -147,9 +155,10 @@ class MessageController extends AppController{
 				}
 			}
 		}
+		
 		//to make sure there are no duplicate entries
 		$finalList = array_map('unserialize', array_unique(array_map('serialize',$dummyArray)));
-		
+		$finalList = array_values($finalList);
 		//return the final list
 		return $finalList;
 	}

@@ -60,20 +60,24 @@
 				<div id="show-more" style="text-align:center">
 					<button class="btn btn-link" id="show-more" style="text-align:center">Show More</button>
 				</div>
-				
 				<script>
 					$(document).ready(function(){
-						var url = '//message.local/message/show/'+<?php echo $data['page_number']; ?>;
-						$("#show-more").click(function() {
+						var track_click = 1;
+						var url = '/message/show/';
+						$('#show-more').on('click', function() {
 							$.ajax({
 								url: url,
 								type: 'POST',
+								data: '{"page_number": '+track_click+'}',
+								dataType: 'json',
 								success: function(data){
-									$.get(url, function(data) {
-										$("#show-more").hide();
+										$('#show-more').hide();
 										$('#paginated-content-container').append(data);
-									});
-								}
+										track_click++;
+									}, 
+								error: function(data,status,xhr){
+										alert(xhr);
+									}
 							});
 						});
 					});

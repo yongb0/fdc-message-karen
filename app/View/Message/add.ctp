@@ -53,6 +53,10 @@
 						allowClear: true,
 						minimumInputLength: 1,
 					  });
+					  
+					  $('#select2').one('change', function() {
+							 $('#submit-btn').prop('disabled', false);
+						});
 					});
 				</script>
 				<br><br>
@@ -60,7 +64,7 @@
 					echo $this->Form->textarea('content', array('label' => false, 'class' => 'form-control', 'placeholder' => 'Enter message') );
 				?>  <br> <?php	
 					echo $this->Form->input('created', array('type' => 'hidden', 'value' =>  date('Y:m:d H:i:s')));
-					echo $this->Form->submit('Send Message', array('class' => 'btn btn-primary btn-md', 'id' => 'submit-btn'));
+					echo $this->Form->submit('Send Message', array('class' => 'btn btn-primary btn-md', 'id' => 'submit-btn', 'disabled' => 'disabled'));
 					echo $this->Form->end();
 				?>
 			</div>
