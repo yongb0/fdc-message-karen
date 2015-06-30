@@ -6,18 +6,18 @@
 		$current_user = $this->Session->read('user_id');
 		
 		foreach ($message as $msg) { 	?> 
-			<div class="row" id=<?php echo 'msg'.$msg['Message']['id']?>>
+			<div class="row" id=<?php echo 'msg'.$msg['Message']['id']?> data-page="<?php echo $data['page_number']; ?>">
 				<div class="col-sm-2">
 					<div class="pull-right">
 						<?php 
 							if ($msg['Message']['to_id'] == $current_user) {
 								foreach ($user as $sender) {
 									if ($msg['Message']['from_id'] == $sender['User']['id']) { 
-										echo $this->Html->image($sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));
+										echo $this->Html->image('/img/tmp/'.$sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));
 										?> <br><center><strong> <?php echo $sender['User']['name']; ?> </center></strong> 
 						<?php 	} } } else { 
 								foreach ($user as $sender) {
-									if ($msg['Message']['to_id'] == $sender['User']['id']) { 
+									if ('/img/tmp/'.$msg['Message']['to_id'] == $sender['User']['id']) { 
 										echo $this->Html->image($sender['User']['image'], array('class' => 'img-circle', 'width' => '100', 'height' => '100'));
 										?> <br><center><strong> <?php echo $sender['User']['name']; ?> </center></strong> 
 						<?php 	} } } ?>
@@ -57,31 +57,12 @@
 				});
 			</script>
 		<?php 	} if ($data['page_number'] < $data['total_pages']) { ?>
-				<div id="show-more" style="text-align:center">
-					<button class="btn btn-link" id="show-more" style="text-align:center">Show More</button>
+				<div style="text-align:center">
+					<button class="btn btn-link" id="show-more" style="text-align:center" >Show More</button>
 				</div>
-				<script>
-					$(document).ready(function(){
-						var track_click = 1;
-						var url = '/message/show/';
-						$('#show-more').on('click', function() {
-							$.ajax({
-								url: url,
-								type: 'POST',
-								data: '{"page_number": '+track_click+'}',
-								dataType: 'json',
-								success: function(data){
-										$('#show-more').hide();
-										$('#paginated-content-container').append(data);
-										track_click++;
-									}, 
-								error: function(data,status,xhr){
-										alert(xhr);
-									}
-							});
-						});
-					});
-				</script>
-		<?php	} } else {?>
-			<div class="well well-lg" style="text-align:center" id="no-msg"><h1>No Messages</h1></div>
+		<?php	} } if($data['messages'] == null) {?>
+			<script>
+				$(document).show('#no-msg');
+			</script>
 		<?php } ?>
+			<div class="well well-lg" style="text-align:center; display:none" id="no-msg"><h1>No Messages</h1></div>

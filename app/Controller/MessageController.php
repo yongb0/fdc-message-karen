@@ -15,6 +15,8 @@ class MessageController extends AppController{
 			$data['alert'] = null;
 			$this->loadModel('User');
 			if ($this->request->is('post')) {
+				date_default_timezone_set('US/Pacific');
+				$this->request->data['Message']['created'] = date('Y:m:d H:i:s');
 				$this->request->data['Message']['from_id'] = $this->Auth->user('id');
 				$this->request->data['Message']['to_id'] = $this->request->data['to_id'];
 				if ($this->Message->save($this->request->data)) {
@@ -44,6 +46,8 @@ class MessageController extends AppController{
 	
 	public function reply() {
 		$message = $this->Message->findById($this->request->params['named']['id']);
+		date_default_timezone_set('US/Pacific');
+		$this->Message->saveField('created', date('Y:m:d H:i:s'));
 		if ($message['Message']['from_id'] == $this->Auth->user('id')){
 			$this->request->data['Message']['from_id'] = $message['Message']['from_id'];
 			$this->request->data['Message']['to_id'] = $message['Message']['to_id'];
@@ -77,7 +81,7 @@ class MessageController extends AppController{
 	}
 	
 	public function show() { //function for paginating messages
-		$reqData = json_decode($this->request->input());
+		
 		$this->layout = "ajax";
 		
 		$this->loadModel('User');
@@ -86,11 +90,9 @@ class MessageController extends AppController{
 		$message_list = $this->filter();
 		$data['total_rows'] = count($message_list);
 		$data['total_pages'] = ceil($data['total_rows']/$item_per_page);
-<<<<<<< HEAD
-		$data['user'] = $this->User->find('all'); 
-			
-		if (isset($reqData->page_number)) {
-			$page = $reqData->page_number;
+
+		if (isset($this->request->data['page_number'])) {
+			$page = $this->request->data['page_number'];
 			$index = 0;
 			for($i = $item_per_page*$page; $i < $item_per_page*($page+1); $i++ ) {
 				if ($i < $data['total_rows']){
@@ -98,21 +100,7 @@ class MessageController extends AppController{
 					$index++;
 				}
 			}
-=======
-		for($i = 0; $i < $item_per_page; $i++){
-			if ($i < count($message_list)){
-				$data['messages'][$i] = $message_list[$i]; //one data
-			}
-		}
-		
-		
-		if (isset($this->request->params['page'])) {
-			$page = $this->request->params['page'];
-			$data['messages'][0] = $message_list[$page]; //add data
->>>>>>> parent of 2444e88... fix date, datepicker, and image upload
-			$data['page_number']+=1;
-			echo json_encode($data);
-			exit;
+			$data['page_number'] = $this->request->data['page_number']+1;
 		} else {
 			for($i = 0; $i < $item_per_page; $i++){
 				if ($i < $data['total_rows']){
@@ -120,13 +108,8 @@ class MessageController extends AppController{
 				}
 			}
 		}
-<<<<<<< HEAD
-=======
-		
-		
 		//var_dump($data);
 		$data['user'] = $this->User->find('all'); 
->>>>>>> parent of 2444e88... fix date, datepicker, and image upload
 		$this->set('data', $data);
 	}
 	
@@ -177,6 +160,11 @@ class MessageController extends AppController{
 		$finalList = array_values($finalList);
 		//return the final list
 		return $finalList;
+	}
+	
+	public function validateDate($date, $format = 'Y-m-d H:i:s') {
+		$d = DateTime::createFromFormat($format, $date);
+		return $d && $d->format($format) == $date;
 	}
 }
 ?>
