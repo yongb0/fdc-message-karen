@@ -49,13 +49,11 @@
 			<tr>
 				<td>Last Login: <?php echo $this->Time->nice($user['User']['last_login_time']); ?> </td>
 			</tr>
-			<tr>
-				<td>Hobby: 
-					<div class="well well-md">
+		</table>
+			<p>Hobby:</p> 
+					<div class="well well-md" style="word-wrap:break-word">
 					<?php if (isset($user['User']['hobby'])) {
 									echo $user['User']['hobby']; 
 								} else	{ echo '<small>Update to enter hobby.</small>'; }?>
 					</div>
-				</td>
-			</tr>
-		</table>
+		
