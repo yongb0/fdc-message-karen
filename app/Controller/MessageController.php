@@ -16,6 +16,7 @@ class MessageController extends AppController{
 			$this->loadModel('User');
 			if ($this->request->is('post', 'put')) {
 				date_default_timezone_set('US/Pacific');
+				$this->request->data['Message']['content'] = htmlentities($this->request->data['Message']['content']);
 				$this->request->data['Message']['created'] = date('Y:m:d H:i:s');
 				$this->request->data['Message']['from_id'] = $this->Auth->user('id');
 				if (isset($this->request->data['to_id'])) {
