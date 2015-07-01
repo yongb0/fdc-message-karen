@@ -73,9 +73,6 @@
 					</div>
 				</div>
 			<?php	} ?>
-			<div style="text-align:center">
-				<?php echo $this->Paginator->numbers();?>
-			</div>
 			<script type="text/javascript">
 				$(document).ready(function(){
 					$(<?php echo "'#delete".$msg['Message']['id']."'"?>).click(function() {
@@ -96,4 +93,7 @@
 				});
 			</script>
 			<?php } ?>	
+			<div style="text-align:center">
+				<?php echo $this->Paginator->numbers();?>
+			</div>
 		</div>
