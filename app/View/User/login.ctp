@@ -5,7 +5,6 @@
 	switch($data) {
 	case 1: ?>
 		<div class="alert alert-warning">
-			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>Login Unsuccessful!</strong> Invalid username or password. Try again.
 		</div>
 	<?php	break; 
