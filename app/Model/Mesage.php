@@ -1,11 +1,6 @@
 <?php
 
 class Message extends AppModel{
-	public $hasAndBelongsToMany = array(
-		'User' => array(
-			'className' => 'User')
-	);	
-	
 	public $validate = array(
 		'content' => array(
 			'required' => array(
@@ -14,7 +9,19 @@ class Message extends AppModel{
 		'from_id' => array(
 			'required' => array(
 				'rule' => 'notEmpty')
+			),
+		'to_id' => array(
+			'required' => array(
+				'rule' => 'notEmpty')
 			)
 	);
+	
+	public function beforeSave($option = array()) {
+		if(isset($this->data[$this->alias]['to_id'])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }	
 ?>

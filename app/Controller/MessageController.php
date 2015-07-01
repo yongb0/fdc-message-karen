@@ -14,13 +14,15 @@ class MessageController extends AppController{
 		if ($this->Auth->login()) {
 			$data['alert'] = null;
 			$this->loadModel('User');
-			if ($this->request->is('post')) {
+			if ($this->request->is('post', 'put')) {
 				date_default_timezone_set('US/Pacific');
 				$this->request->data['Message']['created'] = date('Y:m:d H:i:s');
 				$this->request->data['Message']['from_id'] = $this->Auth->user('id');
-				$this->request->data['Message']['to_id'] = $this->request->data['to_id'];
-				if ($this->Message->save($this->request->data)) {
-					return $this->redirect(array('action' => 'index'));
+				if (isset($this->request->data['to_id'])) {
+					$this->request->data['Message']['to_id'] = $this->request->data['to_id'];
+					if ($this->Message->save($this->request->data)) {
+						return $this->redirect(array('action' => 'index'));
+					}
 				}
 				$data['alert'] = 1; //for alert message when error occurs
 			}
